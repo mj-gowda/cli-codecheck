@@ -42,6 +42,9 @@ Type ```codecheck``` or ```codecheck <file path in cwd>``` to get started.
 
 <br>
 
-## License
+## Summary
 
-MIT © ***termTranslate***
+- Learnt so many new things with this task, so overall a very fruitful experiene.
+- The sample cli app given in the task was very useful as a starting guide for someone new to cli apps like me.
+- Kicking myself for letting me wander deep into many new topics I came across while building this app, could have easily finished it very soon.
+- Will be building more cli apps in the future.
