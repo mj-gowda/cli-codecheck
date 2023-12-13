@@ -2,7 +2,7 @@
   CODECHECK 
  </h1>
  <br>
-<p align="center">A CLI to get your own AI coding assistant who can review and explain any code you want.</p>
+<p align="center">A CLI to get your own AI coding assistant on the terminal.</p>
 <br>
 
 <p align="center">
@@ -14,9 +14,10 @@
 
 ## Usage
 
+Run command 'codecheck' in the active directory. This will list all the files as options. Then you can select any file you want for AI assitance
+
 ```
-~$ codecheck /bin/index.js
-Usage: codecheck <file path>
+~$ codecheck
 ```
 #### The default file name will be index.js if just codecheck is called
 
@@ -38,7 +39,7 @@ PATH="./node_modules/.bin:$PATH"
 ```
 4. Now you are good to go and can use the CLI globally!
 
-Type ```codecheck``` or ```codecheck <file path in cwd>``` to get started.
+Type ```codecheck``` in the cli to get started.
 
 <br>
 

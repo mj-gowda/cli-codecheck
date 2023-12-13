@@ -79,7 +79,12 @@ async function main() {
     try {
         // Replace this with the actual list of files in the directory
         const files = await fs.readdir(process.cwd());
-        const yourFile = await selectFile(files);
+        let yourFile;
+        if (files) {
+            yourFile = await selectFile(files);
+        } else {
+            process.exit('Empty directory')
+        }
         console.log('Selected File:', yourFile);
 
         const code = await run(yourFile);
