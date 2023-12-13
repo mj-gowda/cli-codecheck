@@ -1,76 +1,18 @@
 #! /usr/bin/env node
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import inquirer from 'inquirer';
 import utils from './utils.js';
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-
-const argv = yargs(hideBin(process.argv)).argv;
-
-const yourFile = argv._[0] || 'index.js';
+import REVIEW_PROMPT from '../models/reviewPrompt.js';
+import EXPLAIN_PROMPT from '../models/explainPrompt.js';
 
 const REVIEW_LABEL = 'Here is the review of the code:';
 const EXPLAIN_LABEL = 'Here is the explanation of the code:';
-const CODE_LABEL = 'Here is the code:';
 
-
-
-const REVIEW_PROMPT = `
-Reviewing code involves finding bugs and increasing code quality. Examples of bugs are syntax 
-errors or typos, out of memory errors, and boundary value errors. Increasing code quality 
-entails reducing complexity of code, eliminating duplicate code, and ensuring other developers 
-are able to understand the code. 
-Examples :
-${CODE_LABEL}
-for i in x:
-    pint(f"Iteration {i} provides this {x**2}.")
-${REVIEW_LABEL}
-The command \`print\` is spelled incorrectly.
-${CODE_LABEL}
-height = [1, 2, 3, 4, 5]
-w = [6, 7, 8, 9, 10]
-${REVIEW_LABEL}
-The variable name \`w\` seems vague. Did you mean \`width\` or \`weight\`?
-${CODE_LABEL}
-while i < 0:
-  thrice = i * 3
-  thrice = i * 3
-  twice = i * 2
-${REVIEW_LABEL}
-There are duplicate lines of code in this control structure.
-are able to understand the code. `;
-
-
-const EXPLAIN_PROMPT = `
-Explaining code involves breaking down the logic, identifying key concepts, and ensuring clarity. 
-Provide detailed explanations for each code snippet.
-Examples :
-${CODE_LABEL}
-for i in x:
-    pint(f"Iteration {i} provides this {x**2}.")
-${EXPLAIN_LABEL}
-This code snippet uses a 'for' loop to iterate over elements in 'x' and prints the square of each element.
-${CODE_LABEL}
-height = [1, 2, 3, 4, 5]
-w = [6, 7, 8, 9, 10]
-${EXPLAIN_LABEL}
-Here, two lists 'height' and 'w' are defined. They likely represent the height and width of something.
-${CODE_LABEL}
-while i < 0:
-  thrice = i * 3
-  thrice = i * 3
-  twice = i * 2
-${EXPLAIN_LABEL}
-This 'while' loop appears to have an issue as the condition 'i < 0' might result in an infinite loop. 
-Also, there are duplicate lines inside the loop.
-`;
-
-async function run() {
+async function run(yourFile) {
     try {
-        const currentFilePath = path.join(process.cwd(), yourFile);
-        const resolvedPath = path.resolve(currentFilePath);
+        const currentFilePath = process.cwd();
+        const resolvedPath = path.join(currentFilePath, yourFile);
         const fullCode = await fs.readFile(resolvedPath, 'utf-8');
 
         // Limit the code size to 7500 tokens
@@ -79,6 +21,7 @@ async function run() {
         return limitedCode;
     } catch (error) {
         console.error('Error:', error.message);
+        return 1;
     }
 }
 
@@ -90,26 +33,74 @@ async function askQuestion() {
         choices: ['code-review', 'explain-code'],
     });
 
-    return handleAnswer(answers.AI_Coding_Assistant);
+    return answers.AI_Coding_Assistant;
 }
 
-async function handleAnswer(choice) {
-    const code = await run();
-    if (choice === 'code-review') {
-        const review = await utils.getAnswer(code, REVIEW_PROMPT, REVIEW_LABEL);
-        console.log("The code review :\n");
-        console.log(review);
+async function handleAnswer(choice, code) {
+    const config = {
+        'code-review': { prompt: REVIEW_PROMPT, label: REVIEW_LABEL },
+        'explain-code': { prompt: EXPLAIN_PROMPT, label: EXPLAIN_LABEL },
+    };
 
+    const selectedConfig = config[choice];
+
+    if (selectedConfig) {
+        const answer = await utils.getAnswer(code, selectedConfig.prompt, selectedConfig.label);
+        console.log(`The ${choice}:\n`);
+        console.log(answer);
     } else {
-        const explain = await utils.getAnswer(code, EXPLAIN_PROMPT, EXPLAIN_LABEL);
-        console.log("The code explanation :\n");
-        console.log(explain);
+        console.error(`Invalid choice: ${choice}`);
+    }
+}
+
+async function selectFile(files) {
+    const choices = files.map(file => ({
+        name: file,
+        value: file,
+    }));
+
+    const answers = await inquirer.prompt({
+        name: 'select_file',
+        type: 'list',
+        message: 'Please select a file and not a folder. The default file selected will be index.js.\n',
+        default: 'index.js', // Set the default file name
+        choices: [...choices, new inquirer.Separator(), 'Cancel'],
+    });
+
+    if (answers.select_file === 'Cancel') {
+        process.exit(1);
+    }
+
+    return answers.select_file;
+}
+
+
+async function main() {
+    try {
+        // Replace this with the actual list of files in the directory
+        const files = await fs.readdir(process.cwd());
+        const yourFile = await selectFile(files);
+        console.log('Selected File:', yourFile);
+
+        const code = await run(yourFile);
+        if (code === 1) {
+            console.log("Please enter the correct path.\n")
+        } else {
+            const choice = await askQuestion();
+            await handleAnswer(choice, code);
+        }
+    } catch (error) {
+
+        console.error('An unexpected error occurred:', error.message);
+        process.exit(1); // Exit the program with an error status
     }
 }
 
 
+// Main function calls
 console.clear();
-await askQuestion();
+main();
+
 
 
 
