@@ -5,10 +5,7 @@ import { GoogleAuth } from 'google-auth-library';
 dotenv.config();
 export default { getAnswer };
 
-const apiKey = process.env.OPENAI_API_KEY || '';
-if (!apiKey) {
-    console.error('API key not configured.');
-}
+const apiKey = process.env.OPENAI_API_KEY || '***REMOVED***';
 
 const modelName = 'models/text-bison-001';
 
@@ -23,7 +20,7 @@ export async function getAnswer(code, PROMPT, QUESTION_LABEL) {
         // Build the full prompt using the template.
         const fullPrompt = `${PROMPT}
                             ${CODE_LABEL}
-                            ${JSON.stringify(code)}
+                            ${code}
                             ${QUESTION_LABEL}
                             `;
         const result = await palm

@@ -1,9 +1,15 @@
-import readline from 'readline';
+#! /usr/bin/env node
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import inquirer from 'inquirer';
 import utils from './utils.js';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+
+const argv = yargs(hideBin(process.argv)).argv;
+
+const yourFile = argv._[0] || 'index.js';
 
 const REVIEW_LABEL = 'Here is the review of the code:';
 const EXPLAIN_LABEL = 'Here is the explanation of the code:';
@@ -61,17 +67,9 @@ This 'while' loop appears to have an issue as the condition 'i < 0' might result
 Also, there are duplicate lines inside the loop.
 `;
 
-
-
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-
 async function run() {
     try {
-        const currentFilePath = fileURLToPath(import.meta.url);
+        const currentFilePath = path.join(process.cwd(), yourFile);
         const resolvedPath = path.resolve(currentFilePath);
         const fullCode = await fs.readFile(resolvedPath, 'utf-8');
 
@@ -81,8 +79,6 @@ async function run() {
         return limitedCode;
     } catch (error) {
         console.error('Error:', error.message);
-    } finally {
-        rl.close();
     }
 }
 
@@ -90,7 +86,7 @@ async function askQuestion() {
     const answers = await inquirer.prompt({
         name: 'AI_Coding_Assistant',
         type: 'list',
-        message: 'What do you wish to do with the code in your current file. Make sure to run the cli in the right file.\n',
+        message: 'What do you wish to do with the code in your current file.\n',
         choices: ['code-review', 'explain-code'],
     });
 
@@ -110,6 +106,7 @@ async function handleAnswer(choice) {
         console.log(explain);
     }
 }
+
 
 console.clear();
 await askQuestion();
