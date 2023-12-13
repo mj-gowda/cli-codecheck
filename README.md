@@ -6,7 +6,7 @@
 <br>
 
 <p align="center">
-<img src="images/demo.gif" alt="demonstration" height="500" width="800" >  
+<img src="images/demo.gif" alt="demonstration" height="350" width="650" >  
 </p>
 
 
@@ -19,7 +19,7 @@ Run command 'codecheck' in the active directory. This will list all the files as
 ```
 ~$ codecheck
 ```
-#### The default file name will be index.js if just codecheck is called
+
 
 > :warning: **Please be aware that the file content will be accessed by a thrid party api.(google palm api)**
 
