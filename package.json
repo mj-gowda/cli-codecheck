@@ -2,17 +2,18 @@
   "name": "codecheck",
   "version": "1.0.0",
   "description": "Your AI coding assistant",
-  "main": "bin/index.js",
-  "type": "module",
+  "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ."
+    "build": "rm -rf ./dist && npx tsc",
+    "start": "npm run build && node dist/bin/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bin": {
-    "codecheck": "./bin/index.js"
+    "codecheck": "./dist/bin/index.js"
   },
   "dependencies": {
     "@google-ai/generativelanguage": "^1.0.1",
@@ -23,6 +24,8 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.4",
     "eslint": "^8.55.0"
   }
 }

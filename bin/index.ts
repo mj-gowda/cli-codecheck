@@ -62,8 +62,7 @@ async function selectFile(files) {
     const answers = await inquirer.prompt({
         name: 'select_file',
         type: 'list',
-        message: 'Please select a file and not a folder. The default file selected will be index.js.\n',
-        default: 'index.js', // Set the default file name
+        message: 'Please select a file and not a folder.\n',
         choices: [...choices, new inquirer.Separator(), 'Cancel'],
     });
 
@@ -80,16 +79,17 @@ async function main() {
         // Replace this with the actual list of files in the directory
         const files = await fs.readdir(process.cwd());
         let yourFile;
-        if (files) {
+        if (files.length > 0) {  // Ensure there are files before calling selectFile
             yourFile = await selectFile(files);
         } else {
-            process.exit('Empty directory')
+            console.log('No files found in the directory.');
+            process.exit(1);
         }
         console.log('Selected File:', yourFile);
 
         const code = await run(yourFile);
         if (code === 1) {
-            console.log("Please enter the correct path.\n")
+            console.log("Please choose the correct file not folder.\n")
         } else {
             const choice = await askQuestion();
             await handleAnswer(choice, code);

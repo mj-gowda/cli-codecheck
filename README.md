@@ -29,7 +29,8 @@ Run command 'codecheck' in the active directory. This will list all the files as
 
 1. Clone the repository and then navigate to it.
 2. Run ```npm install``` to install the dependencies.
-3. Run ```npm install -g .``` to install the CLI. <br>
+3. Run ```npm build``` to start build process.
+4. Run ```npm install -g .``` to install the CLI globally in your pc. <br>
 
 > :warning: **This might cause an error** which can be resolved easily by using ```sudo``` with the command, **however**, using ```sudo``` with ```npm``` is **not recommended** because it might cause permission issues later. So instead put the code below in your .bashrc file and then run the above command again.
 ```
@@ -42,6 +43,7 @@ PATH="./node_modules/.bin:$PATH"
 Type ```codecheck``` in the cli to get started.
 
 <br>
+
 
 ## Summary
 

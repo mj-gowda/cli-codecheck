@@ -20,7 +20,7 @@ const CODE_LABEL = 'Here is the code:';
 
 
 // Function to generate text using the OpenAI API
-async function generateText(prompt) {
+async function generateText(prompt: string) {
     try {
         // Make an asynchronous call to the OpenAI API to generate text based on the provided prompt
         const result = await palm.generateText({
@@ -28,8 +28,16 @@ async function generateText(prompt) {
             prompt: { text: prompt },
         });
 
-        // Return the output from the API response
-        return result[0].candidates[0].output;
+
+        const answer = result?.[0]?.candidates?.[0]?.output;
+
+        if (answer !== undefined) {
+            return answer;
+        } else {
+            // Handle the case where one of the properties is null or undefined
+            console.error('The AI is not able to read the file content.');
+        }
+
     } catch (error) {
         // Handle errors during the API call and throw a custom error message
         throw new Error(`Failed to generate text: ${error.message}`);
@@ -37,7 +45,7 @@ async function generateText(prompt) {
 }
 
 // Main function to get an answer based on code, prompt, and question labels
-export async function getAnswer(code, PROMPT, QUESTION_LABEL) {
+export async function getAnswer(code: any, PROMPT: any, QUESTION_LABEL: any) {
     try {
         // Build the full prompt by combining the provided prompt, code, and question label
         const fullPrompt = buildFullPrompt(code, PROMPT, QUESTION_LABEL);
@@ -54,7 +62,7 @@ export async function getAnswer(code, PROMPT, QUESTION_LABEL) {
 }
 
 // Helper function to construct the full prompt with code, prompt, and question label
-function buildFullPrompt(code, PROMPT, QUESTION_LABEL) {
+function buildFullPrompt(code: any, PROMPT: any, QUESTION_LABEL: any) {
     return `${PROMPT}
             ${CODE_LABEL}
             ${code}
