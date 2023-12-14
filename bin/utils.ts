@@ -4,7 +4,7 @@ import { GoogleAuth } from 'google-auth-library';
 export default { getAnswer };
 
 dotenv.config();
-const apiKey = process.env.OPENAI_API_KEY || '***REMOVED***';
+const apiKey = process.env.PALM_API_KEY || '';
 
 // Define the model name
 const modelName = 'models/text-bison-001';

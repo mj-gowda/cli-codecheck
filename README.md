@@ -21,16 +21,24 @@ Run command 'codecheck' in the active directory. This will list all the files as
 ```
 
 
-> :warning: **Please be aware that the file content will be accessed by a thrid party api.(google palm api)**
+> :warning: **Please be aware that the file content will be accessed by a thrid party api.(Google PaLM-api)**
 
 <br>
 
 ## Installation
 
+
+#### Add google palm api key
+1. Generate free google palm api key from Google AI studio.
+2. Add api key to .env.example and change file name to .env
+
+
+#### Build and install
 1. Clone the repository and then navigate to it.
 2. Run ```npm install``` to install the dependencies.
 3. Run ```npm build``` to start build process.
 4. Run ```npm install -g .``` to install the CLI globally in your pc. <br>
+
 
 > :warning: **This might cause an error** which can be resolved easily by using ```sudo``` with the command, **however**, using ```sudo``` with ```npm``` is **not recommended** because it might cause permission issues later. So instead put the code below in your .bashrc file and then run the above command again.
 ```
@@ -38,9 +46,9 @@ npm set prefix ~/.npm
 PATH="$HOME/.npm/bin:$PATH"
 PATH="./node_modules/.bin:$PATH"
 ```
-4. Now you are good to go and can use the CLI globally!
+5. Now you are good to go and can use the CLI globally!
 
-Type ```codecheck``` in the cli to get started.
+### Type ```codecheck``` in the cli to get started.
 
 <br>
 
