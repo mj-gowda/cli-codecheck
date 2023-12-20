@@ -50,12 +50,3 @@ PATH="./node_modules/.bin:$PATH"
 
 ### Type ```codecheck``` in the cli to get started.
 
-<br>
-
-
-## Summary
-
-- Learnt so many new things with this task, so overall a very fruitful experiene.
-- The sample cli app given in the task was very useful as a starting guide for someone new to cli apps like me.
-- Kicking myself for letting me wander deep into many new topics I came across while building this app, could have easily finished it very soon.
-- Will be building more cli apps in the future.
